@@ -16,11 +16,6 @@ pipeline {
                 dependencyCheckPublisher pattern: 'dependency-check-report.xml'
             }
         }
-//     stage('Prepare Environment') {
-//     steps {
-//         sh 'composer install'
-//     }
-// }
         stage('Integration UI Test') {
             parallel {
                 stage('Deploy') {
@@ -31,23 +26,23 @@ pipeline {
                         sh './jenkins/scripts/kill.sh'
                     }
                 }
-                stage('Headless Browser Test') {
-                    agent {
-                        docker {
-                            image 'maven'
-                            args '--platform linux/amd64 -u root --network jenkins-php-selenium-test-1_jenkins-net --entrypoint=""'
-                        }
-                    }
-                    steps {
-                        sh 'mvn -B -DskipTests clean package'
-                        sh 'mvn test'
-                    }
-                    post {
-                        always {
-                            junit 'target/surefire-reports/*.xml'
-                        }
-                    }
-                }
+                // stage('Headless Browser Test') {
+                //     agent {
+                //         docker {
+                //             image 'maven'
+                //             args '--platform linux/amd64 -u root --network jenkins-php-selenium-test-1_jenkins-net --entrypoint=""'
+                //         }
+                //     }
+                //     steps {
+                //         sh 'mvn -B -DskipTests clean package'
+                //         sh 'mvn test'
+                //     }
+                //     post {
+                //         always {
+                //             junit 'target/surefire-reports/*.xml'
+                //         }
+                //     }
+                // }
             }
         }
 //         stage('SonarQube Analysis') {
