@@ -48,7 +48,7 @@ pipeline {
         stage('SonarQube Analysis') {
             agent any
             environment {
-                SONARQUBE_TOKEN = 'sqp_a5f086a9165e791f6aa6c90b3333c498d130392a'
+                SONARQUBE_TOKEN = 'sqp_2473f6812278e26beaa4cdefd711d229bd5d4d8d'
                 SONARQUBE_SCANNER_HOME = tool name: 'SonarQube Scanner'
             }
             steps {
