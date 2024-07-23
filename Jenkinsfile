@@ -45,24 +45,24 @@ pipeline {
                 // }
             }
         }
-//         stage('SonarQube Analysis') {
-//             agent any
-//             environment {
-//                 SONARQUBE_TOKEN = 'sqp_cc8293205d0f00d5550afbca752a131c4d7dce91'
-//                 SONARQUBE_SCANNER_HOME = tool name: 'SonarQube Scanner'
-//             }
-//             steps {
-//                 withSonarQubeEnv('SonarQube') {
-//                     sh '''
-//                     ${SONARQUBE_SCANNER_HOME}/bin/sonar-scanner \
-//                     -Dsonar.projectKey=OWASP \
-//                     -Dsonar.sources=./src \
-//                     -Dsonar.host.url=http://sonarqube:9000 \
-//                     -Dsonar.login=${SONARQUBE_TOKEN}
-//                     '''
-//                 }
-//             }
-//         }
+        stage('SonarQube Analysis') {
+            agent any
+            environment {
+                SONARQUBE_TOKEN = 'sqp_a5f086a9165e791f6aa6c90b3333c498d130392a'
+                SONARQUBE_SCANNER_HOME = tool name: 'SonarQube Scanner'
+            }
+            steps {
+                withSonarQubeEnv('SonarQube') {
+                    sh '''
+                    ${SONARQUBE_SCANNER_HOME}/bin/sonar-scanner \
+                    -Dsonar.projectKey=OWASP \
+                    -Dsonar.sources=./src \
+                    -Dsonar.host.url=http://sonarqube:9000 \
+                    -Dsonar.login=${SONARQUBE_TOKEN}
+                    '''
+                }
+            }
+        }
 //         stage('Cleanup') {
 //             steps {
 //                 sh 'rm -rf vendor'  // Remove installed dependencies
