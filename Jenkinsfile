@@ -1,21 +1,21 @@
 pipeline {
     agent any
-//     stages {
-//         stage('OWASP Dependency-Check Vulnerabilities') {
-//             agent any
-//             environment {
-//                 NVD_API_KEY = credentials('NVD_API_KEY')
-//             }
-//             steps {
-//             dependencyCheck additionalArguments: ''' 
-//                 -o './'
-//                 -s './'
-//                 -f 'ALL'
-//                 --nvdApiKey $NVD_API_KEY
-//                 --prettyPrint''', odcInstallation: 'OWASP Dependency-Check Vulnerabilities'
-//                 dependencyCheckPublisher pattern: 'dependency-check-report.xml'
-//             }
-//         }
+    stages {
+        stage('OWASP Dependency-Check Vulnerabilities') {
+            agent any
+            environment {
+                NVD_API_KEY = credentials('NVD_API_KEY')
+            }
+            steps {
+            dependencyCheck additionalArguments: ''' 
+                -o './'
+                -s './'
+                -f 'ALL'
+                --nvdApiKey $NVD_API_KEY
+                --prettyPrint''', odcInstallation: 'OWASP Dependency-Check Vulnerabilities'
+                dependencyCheckPublisher pattern: 'dependency-check-report.xml'
+            }
+        }
 //     stage('Prepare Environment') {
 //     steps {
 //         sh 'composer install'
@@ -74,5 +74,5 @@ pipeline {
 //                 sh 'composer clear-cache'  // Clear Composer's cache
 //             }
 //         }
-//     }  
+     }  
 }
