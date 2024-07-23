@@ -4,6 +4,7 @@ services:
   jenkins:
     build:
       dockerfile: Dockerfile
+    image: custom-jenkins:latest
     ports:
       - '8080:8080'
       - '443:8443'
@@ -11,13 +12,67 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./jenkins_home:/var/jenkins_home
+    networks:
+      - jenkins-net
 
   webapp:
     container_name: webapp
     build: ./webapp
     ports:
       - "80:80"
+    networks:
+      - jenkins-net
+
+  sonarqube:
+    image: sonarqube:lts # Use the Long Term Support (LTS) version of SonarQube
+    ports:
+      - "9000:9000" # Map host port 9000 to container port 9000 for SonarQube web interface
+    environment:
+      - SONAR_ES_BOOTSTRAP_CHECKS_DISABLE=true # Disable Elasticsearch bootstrap checks
+      - SONARQUBE_JDBC_URL=jdbc:postgresql://db:5432/sonarqube # URL for the SonarQube database
+      - SONARQUBE_JDBC_USERNAME=sonarqube # Database username
+      - SONARQUBE_JDBC_PASSWORD=sonarqube # Database password
+
+  # nginx config
+  nginxwebsvr:
+    image: nginx:alpine
+    container_name: nginxwebsvr
+    ports:
+      - "82:80"
+    volumes:
+      - ./nginx_conf:/etc/nginx/conf.d
+    networks:
+      - jenkins-net
+
+  mysqldb:
+    image: mysql/mysql-server:8.0
+    restart: always
+    volumes:
+      - ./mysql_data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: testdb
+      MYSQL_USER: user
+      MYSQL_PASSWORD: pass
+    networks:
+      - jenkins-net
+
+  git-server:
+    build:
+      dockerfile: gitserver.Dockerfile
+      context: .
+    restart: always
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./repos:/var/www/git
 
 volumes:
-  jenkins_data:
-    driver: local
+  jenkins_home:
+  mysql:
+  nginx:
+
+
+networks:
+  jenkins-net:
+    driver: bridge
